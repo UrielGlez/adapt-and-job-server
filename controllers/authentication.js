@@ -16,15 +16,14 @@ function signin(req, res, next) {
     
     async.parallel({
         user: callback => User.findOne({_email: email})
-        .select('_password _salt')
         .exec(callback)
     }, (err, result) => {
         if(result.user) {
             bcrypt.hash(password, result.user.salt, (err, hash) => {
                 if(hash === result.user.password) {
                     res.status(200).json({
-                        message: "Login correcto",
-                        objs: jwt.sign(result.user.id, jwtKey)
+                        token: jwt.sign(result.user.id, jwtKey),
+                        user: result.user
                     })
                 } else {
                     res.status(403).json({
