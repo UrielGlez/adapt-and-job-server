@@ -22,7 +22,7 @@ function signin(req, res, next) {
             bcrypt.hash(password, result.user.salt, (err, hash) => {
                 if(hash === result.user.password) {
                     res.status(200).json({
-                        token: jwt.sign(result.user.id, jwtKey),
+                        token: jwt.sign({id: result.user.id}, jwtKey),
                         user: result.user
                     })
                 } else {
