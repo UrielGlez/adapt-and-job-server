@@ -4,7 +4,12 @@ const User = require("../models/user");
 function list(req, res, next) {
   let page = req.params.page ? req.params.page : 1;
 
-  Workspace.paginate({}, {page: page, limit: 10})
+  Workspace.paginate({
+    $or: [
+      {_members: req.user.id},
+      {_creator: req.user.id}
+    ]
+  }, {page: page, limit: 10})
     .then((obj) =>
       res.status(200).json({
         message: "Espacios de trabajo cargados correctamente",
@@ -49,11 +54,15 @@ function addUsers(req, res, next) {
 
 function create(req, res, next){
   let title = req.body.title;
+  let regulation_link = req.body.regulation_link;
   let description = req.body.description;
+  let creator = req.body.creator;
 
   let workspace = new Workspace({
     _title: title,
+    _creator: creator,
     _description: description,
+    _regulation_link: regulation_link
   });
 
   workspace.save().then(obj => res.status(200).json({
@@ -89,7 +98,7 @@ function replace(req, res, next) {
   let title = req.body.title ? req.body.title : "";
   let description = req.body.description ? req.body.description : "";
 
-  let user = new Object({
+  let workspace = new Object({
     _title: title,
     _description: description,
   });
@@ -97,7 +106,7 @@ function replace(req, res, next) {
   Workspace.findOneAndReplace({ _id: id }, workspace)
     .then((obj) =>
       res.status(200).json({
-        message: "Espacio de trabajo modificao correctamente",
+        message: "Espacio de trabajo modificado correctamente",
         objs: obj,
       })
     )
@@ -113,11 +122,15 @@ function update(req, res, next) {
   let id = req.params.id;
   let title = req.body.title;
   let description = req.body.description;
+  let regulation_link = req.body.regulation_link;
 
   let workspace = new Object();
 
   if (title) {
     workspace._title = title;
+  }
+  if (regulation_link) {
+    workspace._regulation_link = regulation_link;
   }
   if (description) {
     workspace._description = description;

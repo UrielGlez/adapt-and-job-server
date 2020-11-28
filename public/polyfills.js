@@ -20,7 +20,7 @@ module.exports = __webpack_require__(/*! /home/urielglez/Documents/programming/j
 /***/ (function(module, exports) {
 
 /**
- * @license Angular v10.2.3
+ * @license Angular v11.0.2
  * (c) 2010-2020 Google LLC. https://angular.io/
  * License: MIT
  */
