@@ -10,6 +10,7 @@ const config = require('config');
 var authenticationRouter = require('./routes/authentication');
 var usersRouter = require('./routes/users');
 var workspaceRouter = require('./routes/workspace');
+var supportMaterialRouter = require('./routes/supportmaterials');
 
 const jwtKey = config.get('secret.key');
 
@@ -30,6 +31,7 @@ app.use(expressJwt({secret: jwtKey, algorithms: ['HS256']}).unless({path: ["/sig
 app.use('/', authenticationRouter);
 app.use('/users', usersRouter);
 app.use('/workspace', workspaceRouter);
+app.use('/support-material', supportMaterialRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
